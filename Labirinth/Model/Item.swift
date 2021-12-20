@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 struct Item{
+    var itemId = 0
     var name = ""
     var description = ""
     var qty = 0

@@ -73,7 +73,9 @@ class Manager{
     }
     
     func addItemsToRooms(){
+        var id = 0
         for item in itemList{
+            
             var addedQty = 0
             while addedQty < item.qty {
                 let randomX = Int.random(in: 0..<4)
@@ -82,7 +84,9 @@ class Manager{
                 if randomRoom.isItRoom{
                     var oneItem = item
                     oneItem.qty = 1
+                    oneItem.itemId = id
                     randomRoom.itemList.append(oneItem)
+                    id += 1
                     addedQty += 1
                     matrix[randomX][randomY] = randomRoom
                 }

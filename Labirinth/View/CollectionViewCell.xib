@@ -50,6 +50,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="OBm-CX-y1x" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="CU6-Rh-bDC"/>
                 <constraint firstItem="OBm-CX-y1x" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="gMm-WM-NAw"/>

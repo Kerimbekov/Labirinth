@@ -41,7 +41,6 @@ class ViewController: UIViewController {
         let manager = Manager()
         manager.createMatrix()
         matrix = manager.matrix
-        
         prepareRoom()
         prepareCollectionView()
         addGestureToButtons()
@@ -57,6 +56,8 @@ class ViewController: UIViewController {
     
     func prepareRoom(){
         currentRoom = matrix[x][y]
+        currentRoom.isSeen = true
+        currentRoom.isHereNow = true
         
         controlSteps()
         drawDoors()
@@ -162,12 +163,21 @@ class ViewController: UIViewController {
             
             targetView.center = CGPoint(x: initialCenter.x + translation.x,
                                           y: initialCenter.y + translation.y)
+            var index = 0
+            for checkItem in currentRoom.itemList{
+                if checkItem.itemId == item.itemId{
+                    currentRoom.itemList[index].x = Int(targetView.frame.minX)
+                    currentRoom.itemList[index].y = Int(targetView.frame.minY)
+                    matrix[x][y] = currentRoom
+                }
+                index += 1
+            }
         case .ended:
-            //print(inventoryView.bounds)
-            //print(targetView.center)
-            print(targetView.convert(targetView.center, to: view))
-            if inventoryView.point(inside: targetView.convert(targetView.center, to: view), with: nil){
-                print("fffff")
+            let inventoryRect = inventoryView.convert(inventoryView.frame, to: view)
+            var targetPoint = inventoryView.convert(targetView.center, to: view)
+            let topPadding = view.safeAreaInsets.top
+            targetPoint = CGPoint(x: targetPoint.x + 40, y: targetPoint.y + 100 + topPadding)
+            if inventoryRect.contains(targetPoint) {
                 //Add item to inventory
                 //Flag if in inventory we already have this item, if yes than just add +1 to badge
                 var flag = true
@@ -302,6 +312,7 @@ class ViewController: UIViewController {
     }
     
     func makeBlueAllDirections(){
+        matrix[x][y].isHereNow = false
         rightImageView.tintColor = .systemBlue
         leftImageView.tintColor = .systemBlue
         upImageView.tintColor = .systemBlue
@@ -393,6 +404,14 @@ class ViewController: UIViewController {
         deselectItemsInInventory()
         itemCollectionView.reloadData()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toMap"{
+            print("cchchchc")
+            let vc = segue.destination as! MapViewController
+            vc.matrix = matrix
+        }
+    }
 }
 
 
@@ -404,6 +423,7 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
         let item = inventoryList[indexPath.item]
+        cell.item = item
         cell.iconImageView.image = item.image
         if item.qty > 1 {
             cell.qtyLabel.text = "\(item.qty)"

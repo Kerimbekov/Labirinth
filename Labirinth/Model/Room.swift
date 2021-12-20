@@ -11,4 +11,6 @@ struct Room{
     var itemList = [Item]()
     var isItRoom = false
     var isBlack = false
+    var isSeen = false
+    var isHereNow = false
 }

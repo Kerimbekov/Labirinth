@@ -12,13 +12,23 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var qtyLabel: UILabel!
     @IBOutlet weak var myView: UIView!
+    var item = Item()
     override func awakeFromNib() {
         super.awakeFromNib()
         qtyLabel.makeCircle()
+        let pan = CustomPanGestureRecognizer(target: self, action: #selector(panAction), item: item)
+        iconImageView.addGestureRecognizer(pan)
+    }
+    
+    var initialCenter: CGPoint = .zero
+    @objc func panAction(sender: CustomPanGestureRecognizer){
+        
     }
     
 
 }
+
+
 
 extension UIView{
     func makeCircle(){
