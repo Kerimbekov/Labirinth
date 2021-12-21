@@ -13,7 +13,7 @@ struct Item{
     var name = ""
     var description = ""
     var qty = 0
-    var image = UIImage(named: "")
+    var image = UIImage(named: "stone")
     var isSelected = false
     var x = 0
     var y = 0

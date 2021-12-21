@@ -41,8 +41,8 @@ class ViewController: UIViewController {
         let manager = Manager()
         manager.createMatrix()
         matrix = manager.matrix
-        prepareRoom()
         prepareCollectionView()
+        prepareRoom()
         addGestureToButtons()
         design()
     }
@@ -135,7 +135,7 @@ class ViewController: UIViewController {
             let myImageView = UIImageView(image: item.image)
             if item.x == 0 && item.y == 0{
                 currentRoom.itemList[index].x = Int.random(in: 0...Int(roomView.frame.width) - 60)
-                currentRoom.itemList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 90)
+                currentRoom.itemList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 150)
                 matrix[x][y] = currentRoom
             }
             myImageView.frame = CGRect(x: currentRoom.itemList[index].x, y: currentRoom.itemList[index].y, width: 60, height: 60)
@@ -244,7 +244,7 @@ class ViewController: UIViewController {
     func prepareCollectionView(){
         itemCollectionView.delegate = self
         itemCollectionView.dataSource = self
-        itemCollectionView.register(UINib(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CollectionViewCell")
+        itemCollectionView.register(UINib(nibName: "InvCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "InvCollectionViewCell")
         itemCollectionView.allowsSelection = true
         itemCollectionView.allowsMultipleSelection = false
     }
@@ -389,6 +389,9 @@ class ViewController: UIViewController {
                 myImageView.addGestureRecognizer(tapG)
                 myImageView.isUserInteractionEnabled = true
                 
+                let pan = CustomPanGestureRecognizer(target: self, action: #selector(panAction), item: item)
+                myImageView.addGestureRecognizer(pan)
+                
                 var newItem = item
                 newItem.qty = 1
                 matrix[x][y].itemList.append(newItem)
@@ -407,7 +410,6 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap"{
-            print("cchchchc")
             let vc = segue.destination as! MapViewController
             vc.matrix = matrix
         }
@@ -415,23 +417,30 @@ class ViewController: UIViewController {
 }
 
 
-extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,dragFromInvDelegate{
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return inventoryList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
-        let item = inventoryList[indexPath.item]
-        cell.item = item
-        cell.iconImageView.image = item.image
-        if item.qty > 1 {
-            cell.qtyLabel.text = "\(item.qty)"
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InvCollectionViewCell", for: indexPath) as! InvCollectionViewCell
+        let invItem = inventoryList[indexPath.item]
+        cell.invItem = invItem
+        cell.myDelegate = self
+        cell.index = indexPath.row
+        cell.setup()
+        if invItem.qty > 1 {
+            cell.qtyLabel.text = "\(invItem.qty)"
             cell.qtyLabel.isHidden = false
         }else{
             cell.qtyLabel.isHidden = true
         }
-        if item.isSelected{
+        if invItem.isSelected{
             cell.myView.backgroundColor = .systemGreen
         }else{
             cell.myView.backgroundColor = .white
@@ -439,14 +448,10 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
         return cell
     }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         deselectItemsInInventory()
-        self.inventoryList[indexPath.row].isSelected = true
-        self.itemCollectionView.reloadData()
+        inventoryList[indexPath.row].isSelected = true
+        itemCollectionView.reloadData()
         
         itemDescriptionLabel.isHidden = false
         buttonsView.isHidden = false
@@ -459,6 +464,66 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 60, height: 60)
+    }
+    
+    func dragFromInvView(sender: CustomPanGestureRecognizer, index:Int) {
+        guard let targetView = sender.view else {return}
+        itemCollectionView.reloadData()
+        let item = sender.model
+        switch sender.state {
+        case .began:
+            initialCenter = targetView.center
+        case .changed:
+            let translation = sender.translation(in: view)
+
+            targetView.center = CGPoint(x: initialCenter.x + translation.x,
+                                        y: initialCenter.y + translation.y)
+            itemCollectionView.reloadData()
+        case .ended:
+            let roomRect = roomView.convert(roomView.frame, to: view)
+            var targetPoint = inventoryView.convert(targetView.center, to: view)
+            let topPadding = view.safeAreaInsets.top
+            targetPoint = CGPoint(x: targetPoint.x + 40, y: targetPoint.y + 100 + topPadding)
+            if roomRect.contains(targetPoint) {
+                deselectItemsInInventory()
+                let myImageView = UIImageView(image: item.image)
+                let randomX = Int.random(in: 31...Int(roomView.frame.width) - 31)
+                let randomY = Int.random(in: 31...Int(roomView.frame.height) - 31)
+                myImageView.frame = CGRect(x: randomX, y: randomY, width: 60, height: 60)
+                roomView.addSubview(myImageView)
+                let tapG = CustomTapGestureRecognizer(target: self, action: #selector(getItem),model: item,subView: myImageView)
+                myImageView.addGestureRecognizer(tapG)
+                myImageView.isUserInteractionEnabled = true
+                
+                let pan = CustomPanGestureRecognizer(target: self, action: #selector(panAction), item: item)
+                myImageView.addGestureRecognizer(pan)
+                
+                var newItem = item
+                newItem.qty = 1
+                matrix[x][y].itemList.append(newItem)
+                
+                if item.qty > 1{
+                    inventoryList[index].qty -= 1
+                }else{
+                    inventoryList.remove(at: index)
+                }
+                self.itemCollectionView.reloadInputViews()
+                self.itemCollectionView.reloadData()
+                
+            }else{
+                UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [.curveEaseInOut]) {
+                    targetView.center = self.initialCenter
+                }
+            }
+        default:
+            itemCollectionView.reloadData()
+            break
+        }
+        itemCollectionView.reloadData()
+    }
+    
     func deselectItemsInInventory(){
         for index in 0..<inventoryList.count{
             inventoryList[index].isSelected = false
@@ -467,8 +532,5 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
         buttonsView.isHidden = true
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 60, height: 60)
-    }
     
 }

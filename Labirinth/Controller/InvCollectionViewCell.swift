@@ -7,28 +7,39 @@
 
 import UIKit
 
-class CollectionViewCell: UICollectionViewCell {
+class InvCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var qtyLabel: UILabel!
     @IBOutlet weak var myView: UIView!
-    var item = Item()
+    var index = 0
+    var myDelegate:dragFromInvDelegate?
+    var invItem = Item()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        qtyLabel.makeCircle()
-        let pan = CustomPanGestureRecognizer(target: self, action: #selector(panAction), item: item)
-        iconImageView.addGestureRecognizer(pan)
+        setup()
     }
     
-    var initialCenter: CGPoint = .zero
+    func setup(){
+        qtyLabel.makeCircle()
+        iconImageView.image = invItem.image
+        let pan = CustomPanGestureRecognizer(target: self, action: #selector(panAction), item: invItem)
+        iconImageView.addGestureRecognizer(pan)
+        iconImageView.isUserInteractionEnabled = true
+    }
+
+    
     @objc func panAction(sender: CustomPanGestureRecognizer){
-        
+        myDelegate?.dragFromInvView(sender: sender,index: index)
     }
     
 
 }
 
-
+protocol dragFromInvDelegate{
+    func dragFromInvView(sender: CustomPanGestureRecognizer,index: Int)
+}
 
 extension UIView{
     func makeCircle(){

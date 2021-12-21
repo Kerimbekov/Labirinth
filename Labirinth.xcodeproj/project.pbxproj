@@ -16,8 +16,8 @@
 		20677490276E1A0C00C82CA7 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2067748F276E1A0C00C82CA7 /* Room.swift */; };
 		20677492276E1A2C00C82CA7 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20677491276E1A2C00C82CA7 /* Item.swift */; };
 		20677494276E1B1900C82CA7 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20677493276E1B1900C82CA7 /* Manager.swift */; };
-		20677498276E292B00C82CA7 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20677496276E292B00C82CA7 /* CollectionViewCell.swift */; };
-		20677499276E292B00C82CA7 /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20677497276E292B00C82CA7 /* CollectionViewCell.xib */; };
+		20677498276E292B00C82CA7 /* InvCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20677496276E292B00C82CA7 /* InvCollectionViewCell.swift */; };
+		20677499276E292B00C82CA7 /* InvCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20677497276E292B00C82CA7 /* InvCollectionViewCell.xib */; };
 		2087E784276E6CA40091EC0C /* CustomTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2087E783276E6CA40091EC0C /* CustomTapGestureRecognizer.swift */; };
 		2087E786276F24F60091EC0C /* CustomPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2087E785276F24F60091EC0C /* CustomPanGestureRecognizer.swift */; };
 		2087E78827707EBD0091EC0C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2087E78727707EBD0091EC0C /* MapViewController.swift */; };
@@ -39,8 +39,8 @@
 		2067748F276E1A0C00C82CA7 /* Room.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		20677491276E1A2C00C82CA7 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		20677493276E1B1900C82CA7 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
-		20677496276E292B00C82CA7 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
-		20677497276E292B00C82CA7 /* CollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell.xib; sourceTree = "<group>"; };
+		20677496276E292B00C82CA7 /* InvCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvCollectionViewCell.swift; sourceTree = "<group>"; };
+		20677497276E292B00C82CA7 /* InvCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InvCollectionViewCell.xib; sourceTree = "<group>"; };
 		2087E783276E6CA40091EC0C /* CustomTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTapGestureRecognizer.swift; sourceTree = "<group>"; };
 		2087E785276F24F60091EC0C /* CustomPanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPanGestureRecognizer.swift; sourceTree = "<group>"; };
 		2087E78727707EBD0091EC0C /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				2067747B276E14C100C82CA7 /* Main.storyboard */,
-				20677497276E292B00C82CA7 /* CollectionViewCell.xib */,
+				20677497276E292B00C82CA7 /* InvCollectionViewCell.xib */,
 				2087E78A27707F3A0091EC0C /* MapTableViewCell.xib */,
 				2087E78E277080BA0091EC0C /* MapCollectionViewCell.xib */,
 			);
@@ -104,7 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				20677479276E14C100C82CA7 /* ViewController.swift */,
-				20677496276E292B00C82CA7 /* CollectionViewCell.swift */,
+				20677496276E292B00C82CA7 /* InvCollectionViewCell.swift */,
 				2087E78727707EBD0091EC0C /* MapViewController.swift */,
 				2087E78927707F3A0091EC0C /* MapTableViewCell.swift */,
 				2087E78D277080BA0091EC0C /* MapCollectionViewCell.swift */,
@@ -204,7 +204,7 @@
 				20677482276E14C200C82CA7 /* LaunchScreen.storyboard in Resources */,
 				2087E790277080BA0091EC0C /* MapCollectionViewCell.xib in Resources */,
 				2067747F276E14C200C82CA7 /* Assets.xcassets in Resources */,
-				20677499276E292B00C82CA7 /* CollectionViewCell.xib in Resources */,
+				20677499276E292B00C82CA7 /* InvCollectionViewCell.xib in Resources */,
 				2087E78C27707F3A0091EC0C /* MapTableViewCell.xib in Resources */,
 				2067747D276E14C100C82CA7 /* Main.storyboard in Resources */,
 			);
@@ -222,7 +222,7 @@
 				2067747A276E14C100C82CA7 /* ViewController.swift in Sources */,
 				2087E78F277080BA0091EC0C /* MapCollectionViewCell.swift in Sources */,
 				2087E78827707EBD0091EC0C /* MapViewController.swift in Sources */,
-				20677498276E292B00C82CA7 /* CollectionViewCell.swift in Sources */,
+				20677498276E292B00C82CA7 /* InvCollectionViewCell.swift in Sources */,
 				2087E786276F24F60091EC0C /* CustomPanGestureRecognizer.swift in Sources */,
 				2087E78B27707F3A0091EC0C /* MapTableViewCell.swift in Sources */,
 				2087E784276E6CA40091EC0C /* CustomTapGestureRecognizer.swift in Sources */,
