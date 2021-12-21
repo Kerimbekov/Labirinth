@@ -107,6 +107,7 @@ class ViewController: UIViewController {
                 leftImageView.isHidden = true
             }
         }
+        //to be changed x == 3 when i finish map randomization
         if x == 3{
             downImageView.isHidden = true
         }else{
@@ -126,6 +127,7 @@ class ViewController: UIViewController {
     }
     
     func drawItemsInRoom(){
+        //clean view
         for subView in self.roomView.subviews {
             subView.removeFromSuperview()
         }
@@ -381,9 +383,11 @@ class ViewController: UIViewController {
             let item = inventoryList[index]
             if item.isSelected{
                 let myImageView = UIImageView(image: item.image)
-                let randomX = Int.random(in: 31...Int(roomView.frame.width) - 31)
-                let randomY = Int.random(in: 31...Int(roomView.frame.height) - 31)
-                myImageView.frame = CGRect(x: randomX, y: randomY, width: 60, height: 60)
+                if item.x == 0 && item.y == 0{
+                    inventoryList[index].x = Int.random(in: 0...Int(roomView.frame.width) - 60)
+                    inventoryList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 150)
+                }
+                myImageView.frame = CGRect(x: inventoryList[index].x , y: inventoryList[index].y, width: 60, height: 60)
                 roomView.addSubview(myImageView)
                 let tapG = CustomTapGestureRecognizer(target: self, action: #selector(getItem),model: item,subView: myImageView)
                 myImageView.addGestureRecognizer(tapG)
