@@ -47,6 +47,10 @@ class ViewController: UIViewController {
         design()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        startNewGame()
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         view.layoutIfNeeded()
@@ -419,7 +423,12 @@ class ViewController: UIViewController {
             vc.matrix = matrix
         }
     }
+    
     @IBAction func newGameTapped(_ sender: Any) {
+        startNewGame()
+    }
+    
+    func startNewGame(){
         var alertTextField = UITextField()
         let alert = UIAlertController(title: "New Game", message: "How many rooms do you want?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -451,6 +460,8 @@ class ViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 }
+
+
 
 
 extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,dragFromInvDelegate{
