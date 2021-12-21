@@ -11,6 +11,8 @@ import UIKit
 class Manager{
     var itemList = [Item]()
     var matrix = [[Room]]()
+    var initialX = 0
+    var initialY = 0
     
     init() {
         createItems()
@@ -72,14 +74,73 @@ class Manager{
         addItemsToRooms()
     }
     
+    func generateMatrix(qty:Int){
+        //Generate matrix with only walls
+        var newMatrix = [[Room]]()
+        let wall = Room()
+        for _ in 0..<10{
+            var list = [Room]()
+            for _ in 0..<10{
+                list.append(wall)
+            }
+            newMatrix.append(list)
+        }
+        
+        
+        let room = Room(itemList: [Item](), isItRoom: true, isBlack: false, isSeen: false, isHereNow: false)
+        var createdRooms = 0
+        var isFirst = true
+        let roomQty = qty > 100 ? 100 : qty
+        while createdRooms < roomQty {
+            let randomX = Int.random(in: 0..<10)
+            let randomY = Int.random(in: 0..<10)
+            if isFirst{
+                newMatrix[randomX][randomY] = room
+                newMatrix[randomX][randomY].isBlack = true
+                isFirst = false
+                
+            }else{
+                let xLeft = randomX
+                let xRight = randomX
+                let xUp = randomX == 0 ? randomX + 1 : randomX - 1
+                let xDown = randomX == 9 ? randomX - 1 : randomX + 1
+                
+                let yLeft = randomY == 0 ? randomY + 1 : randomY - 1
+                let yRight = randomY == 9 ? randomY - 1 : randomY + 1
+                let yUp = randomY
+                let yDown = randomY
+                
+                if newMatrix[xLeft][yLeft].isItRoom || newMatrix[xRight][yRight].isItRoom || newMatrix[xUp][yUp].isItRoom || newMatrix[xDown][yDown].isItRoom{
+                    newMatrix[randomX][randomY].isItRoom = true
+                    createdRooms += 1
+                }
+            }
+        }
+        matrix = newMatrix
+        generateInitialPostion()
+        addItemsToRooms()
+    }
+    
+    func generateInitialPostion(){
+        var isPositionFound = false
+        while !isPositionFound{
+            let randomX = Int.random(in: 0..<10)
+            let randomY = Int.random(in: 0..<10)
+            if matrix[randomX][randomY].isItRoom{
+                initialX = randomX
+                initialY = randomY
+                isPositionFound = true
+            }
+        }
+    }
+    
     func addItemsToRooms(){
         var id = 0
         for item in itemList{
-            
             var addedQty = 0
             while addedQty < item.qty {
-                let randomX = Int.random(in: 0..<4)
-                let randomY = Int.random(in: 0..<4)
+                let randomX = Int.random(in: 0..<matrix.count)
+                let randomY = Int.random(in: 0..<matrix.count)
                 var randomRoom = matrix[randomX][randomY]
                 if randomRoom.isItRoom{
                     var oneItem = item

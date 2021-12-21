@@ -71,8 +71,17 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Yt-Gi-D0U">
+                                        <rect key="frame" x="279.5" y="-0.5" width="94.5" height="31"/>
+                                        <color key="tintColor" systemColor="systemRedColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="New Game"/>
+                                        <connections>
+                                            <action selector="newGameTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7JJ-1j-g3c"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="in7-up-w2z">
-                                        <rect key="frame" x="321.5" y="-0.5" width="52.5" height="31"/>
+                                        <rect key="frame" x="130.5" y="-0.5" width="52.5" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Map"/>
                                         <connections>
@@ -83,9 +92,11 @@
                                 <constraints>
                                     <constraint firstItem="Vm2-dp-lVL" firstAttribute="leading" secondItem="WMU-c4-gcP" secondAttribute="leading" id="2iM-vh-cTN"/>
                                     <constraint firstAttribute="height" constant="30" id="7J0-Zn-Lq8"/>
+                                    <constraint firstItem="in7-up-w2z" firstAttribute="leading" secondItem="pml-JW-68L" secondAttribute="trailing" constant="30" id="CJ8-05-V7N"/>
+                                    <constraint firstItem="6Yt-Gi-D0U" firstAttribute="centerY" secondItem="WMU-c4-gcP" secondAttribute="centerY" id="ESy-qi-2pF"/>
                                     <constraint firstItem="pml-JW-68L" firstAttribute="centerY" secondItem="WMU-c4-gcP" secondAttribute="centerY" id="Fge-BZ-lMR"/>
-                                    <constraint firstAttribute="trailing" secondItem="in7-up-w2z" secondAttribute="trailing" id="KfX-mp-D9J"/>
                                     <constraint firstItem="Vm2-dp-lVL" firstAttribute="centerY" secondItem="WMU-c4-gcP" secondAttribute="centerY" id="VYz-uR-8yF"/>
+                                    <constraint firstAttribute="trailing" secondItem="6Yt-Gi-D0U" secondAttribute="trailing" id="a2A-Aq-b85"/>
                                     <constraint firstItem="pml-JW-68L" firstAttribute="leading" secondItem="Vm2-dp-lVL" secondAttribute="trailing" constant="5" id="dpi-8K-nkP"/>
                                     <constraint firstItem="in7-up-w2z" firstAttribute="centerY" secondItem="WMU-c4-gcP" secondAttribute="centerY" id="n9x-Rz-B7t"/>
                                 </constraints>
@@ -417,6 +428,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

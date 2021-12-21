@@ -33,12 +33,12 @@ class ViewController: UIViewController {
     var x = 3
     var y = 3
     var stepLeft = 100
+    let manager = Manager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.layoutSubviews()
         viewWillLayoutSubviews()
-        let manager = Manager()
         manager.createMatrix()
         matrix = manager.matrix
         prepareCollectionView()
@@ -107,8 +107,8 @@ class ViewController: UIViewController {
                 leftImageView.isHidden = true
             }
         }
-        //to be changed x == 3 when i finish map randomization
-        if x == 3{
+        
+        if x == matrix.count - 1{
             downImageView.isHidden = true
         }else{
             let roomDown = matrix[x + 1][y]
@@ -116,7 +116,7 @@ class ViewController: UIViewController {
                 downImageView.isHidden = true
             }
         }
-        if y == 3{
+        if y == matrix.count - 1{
             rightImageView.isHidden = true
         }else{
             let roomRight = matrix[x][y + 1]
@@ -284,7 +284,7 @@ class ViewController: UIViewController {
         if sender.state == .ended{
             makeBlueAllDirections()
             upImageView.tintColor = .gray
-            if x < 3 {
+            if x < matrix.count - 1 {
                 x += 1
                 prepareRoom()
             }
@@ -295,7 +295,7 @@ class ViewController: UIViewController {
         if sender.state == .ended{
             makeBlueAllDirections()
             leftImageView.tintColor = .gray
-            if y < 3{
+            if y < matrix.count - 1{
                 y += 1
                 prepareRoom()
             }
@@ -352,6 +352,7 @@ class ViewController: UIViewController {
                         invLabel.isHidden = true
                         blackView.backgroundColor = .systemGreen
                         lostLabel.text = "Winner!"
+                        lostLabel.isHidden = false
                     }
                 }else if item.name == "Torch"{
                     mainView.alpha = 1
@@ -417,6 +418,37 @@ class ViewController: UIViewController {
             let vc = segue.destination as! MapViewController
             vc.matrix = matrix
         }
+    }
+    @IBAction func newGameTapped(_ sender: Any) {
+        var alertTextField = UITextField()
+        let alert = UIAlertController(title: "New Game", message: "How many rooms do you want?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: "Ok", style: .default) { [self] action in
+            let str = alertTextField.text ?? "8"
+            if let num = Int(str){
+                manager.generateMatrix(qty: num)
+                matrix = manager.matrix
+                x = manager.initialX
+                y = manager.initialY
+                inventoryList = [Item]()
+                itemCollectionView.reloadData()
+                stepLeft = 100
+                mainView.isHidden = false
+                inventoryView.isHidden = false
+                buttonsView.isHidden = false
+                itemDescriptionLabel.isHidden = false
+                invLabel.isHidden = false
+                blackView.backgroundColor = .black
+                prepareRoom()
+            }
+        }
+        alert.addTextField { textField in
+            textField.keyboardType = .numberPad
+            alertTextField = textField
+        }
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 
