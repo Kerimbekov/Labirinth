@@ -68,16 +68,6 @@ class ViewController: UIViewController {
             mainView.alpha = 1
             lostLabel.isHidden = false
         }
-        
-        var justDoit = 0
-        for mylist in game.matrix{
-            for myItem in mylist{
-                if myItem.isItRoom{
-                    justDoit += 1
-                }
-            }
-        }
-        print(justDoit)
     }
     
     func controlSteps(){
