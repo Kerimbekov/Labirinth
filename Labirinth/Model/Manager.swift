@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class Manager{
-    private var itemList = [Item]()
+    private var itemList = [ItemProtocol]()
     private var matrix = [[Room]]()
     private var initialX = 0
     private var initialY = 0
@@ -20,14 +20,14 @@ class Manager{
     }
     
     private func createItems(){
-        let key = Item(name: "Key", description: "Opens chest", qty: 1, image: UIImage(named: "key"))
-        let chest = Item(name: "Chest", description: "Here is your holy grail", qty: 1,image: UIImage(named: "chest"))
-        let stone = Item(name: "Stone", description: "Useless stone", qty: 5,image: UIImage(named: "stone"))
-        let mushroom = Item(name: "Mushroom", description: "Tasty mushroom but useless", qty: 5,image: UIImage(named: "mushroom"))
-        let bone = Item(name: "Bone", description: "It could be your bone", qty: 5,image: UIImage(named: "bone"))
-        let food = Item(name: "Food", description: "Adds extra 10 steps", qty: 3, image: UIImage(named: "food"))
-        let torch = Item(name: "Torch", description: "Lights up a dark room", qty: 1, image: UIImage(named: "torch"))
-        let gold = Item(name: "Gold", description: "Collect gold for better days", qty: 10, image: UIImage(named: "gold"))
+        let key = Key()
+        let torch = Torch()
+        let food = Food()
+        let chest = Item(idName: "Chest", description: "Here is your holy grail", qty: 1,image: UIImage(named: "chest")!)
+        let stone = Item(idName: "Stone", description: "Useless stone", qty: 5,image: UIImage(named: "stone")!)
+        let mushroom = Item(idName: "Mushroom", description: "Tasty mushroom but useless", qty: 5,image: UIImage(named: "mushroom")!)
+        let bone = Item(idName: "Bone", description: "It could be your bone", qty: 5,image: UIImage(named: "bone")!)
+        let gold = Item(idName: "Gold", description: "Collect gold for better days", qty: 10, image: UIImage(named: "gold")!)
         
         
         itemList.append(key)
@@ -122,12 +122,12 @@ class Manager{
             }
         }
         matrix = newMatrix
-        generateInitialPostion()
+        generateInitialPosition()
         addItemsToRooms()
         initializeGame()
     }
     
-    private func generateInitialPostion(){
+    private func generateInitialPosition(){
         var isPositionFound = false
         while !isPositionFound{
             let randomX = Int.random(in: 0..<10)

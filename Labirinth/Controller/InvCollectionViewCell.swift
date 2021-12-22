@@ -14,7 +14,7 @@ class InvCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var myView: UIView!
     var index = 0
     var myDelegate:dragFromInvDelegate?
-    var invItem = Item()
+    var invItem:ItemProtocol = Item()
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -25,11 +25,13 @@ class GamePlay{
         game.currentRoom = game.matrix[game.currentX][game.currentY]
         game.currentRoom.isSeen = true
         game.currentRoom.isHereNow = true
+        game.matrix[game.currentX][game.currentY] = game.currentRoom
         game.stepLeft -= 1
         drawDoors()
     }
     
     func moveUp(){
+        game.matrix[game.currentX][game.currentY].isHereNow = false
         if game.currentX > 0{
             game.currentX -= 1
             drawDoors()
@@ -37,6 +39,7 @@ class GamePlay{
     }
     
     func moveDown(){
+        game.matrix[game.currentX][game.currentY].isHereNow = false
         if game.currentX < game.matrix.count - 1{
             game.currentX += 1
             drawDoors()
@@ -44,6 +47,7 @@ class GamePlay{
     }
     
     func moveRight(){
+        game.matrix[game.currentX][game.currentY].isHereNow = false
         if game.currentY < game.matrix.count - 1{
             game.currentY += 1
             drawDoors()
@@ -51,6 +55,7 @@ class GamePlay{
     }
     
     func moveLeft(){
+        game.matrix[game.currentX][game.currentY].isHereNow = false
         if game.currentY > 0{
             game.currentY -= 1
             drawDoors()

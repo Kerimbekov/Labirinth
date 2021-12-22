@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 class CustomTapGestureRecognizer:UITapGestureRecognizer{
-    var model:Item
+    var model:ItemProtocol
     var subView:UIImageView
-    init(target: AnyObject, action: Selector, model: Item, subView:UIImageView) {
+    init(target: AnyObject, action: Selector, model: ItemProtocol, subView:UIImageView) {
         self.model = model
         self.subView = subView
         super.init(target: target, action: action)

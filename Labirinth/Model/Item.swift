@@ -8,12 +8,13 @@
 import Foundation
 import UIKit
 
-struct Item{
+struct Item:ItemProtocol{
     var itemId = 0
-    var name = ""
+    var idName = ""
+    var displayName: String = ""
     var description = ""
     var qty = 0
-    var image = UIImage(named: "stone")
+    var image:UIImage = UIImage(named: "stone")!
     var isSelected = false
     var x = 0
     var y = 0

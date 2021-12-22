@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 class CustomPanGestureRecognizer:UIPanGestureRecognizer{
-    var model:Item
+    var model:ItemProtocol
     
-    init(target: Any?, action: Selector?, item:Item) {
+    init(target: Any?, action: Selector?, item:ItemProtocol) {
         self.model = item
         super.init(target: target, action: action)
     }

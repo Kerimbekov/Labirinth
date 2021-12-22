@@ -8,7 +8,7 @@
 import Foundation
 
 struct Room{
-    var itemList = [Item]()
+    var itemList = [ItemProtocol]()
     var isItRoom = false
     var isBlack = false
     var isSeen = false

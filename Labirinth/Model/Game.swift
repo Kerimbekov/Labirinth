@@ -13,7 +13,7 @@ class Game{
     var initialY = 0
     var currentX = 0
     var currentY = 0
-    var inventoryList = [Item]()
+    var inventoryList = [ItemProtocol]()
     var stepLeft = 100
     var currentRoom = Room()
     var directions = AvailableDirections()

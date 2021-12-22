@@ -28,6 +28,10 @@
 		2090DB0C2772D1E7005F3868 /* GamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB0B2772D1E7005F3868 /* GamePlay.swift */; };
 		2090DB0E2772D298005F3868 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB0D2772D298005F3868 /* Game.swift */; };
 		2090DB102772DA06005F3868 /* AvailableDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB0F2772DA06005F3868 /* AvailableDirections.swift */; };
+		2090DB12277302F1005F3868 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB11277302F1005F3868 /* Key.swift */; };
+		2090DB142773091C005F3868 /* ItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB132773091C005F3868 /* ItemProtocol.swift */; };
+		2090DB172773096D005F3868 /* Torch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB162773096D005F3868 /* Torch.swift */; };
+		2090DB1927730A53005F3868 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB1827730A53005F3868 /* Food.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +58,10 @@
 		2090DB0B2772D1E7005F3868 /* GamePlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlay.swift; sourceTree = "<group>"; };
 		2090DB0D2772D298005F3868 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		2090DB0F2772DA06005F3868 /* AvailableDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableDirections.swift; sourceTree = "<group>"; };
+		2090DB11277302F1005F3868 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		2090DB132773091C005F3868 /* ItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemProtocol.swift; sourceTree = "<group>"; };
+		2090DB162773096D005F3868 /* Torch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torch.swift; sourceTree = "<group>"; };
+		2090DB1827730A53005F3868 /* Food.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				2067748F276E1A0C00C82CA7 /* Room.swift */,
-				20677491276E1A2C00C82CA7 /* Item.swift */,
+				2090DB1527730940005F3868 /* Item Classes */,
 				2090DB0D2772D298005F3868 /* Game.swift */,
 				2090DB0F2772DA06005F3868 /* AvailableDirections.swift */,
 				20677493276E1B1900C82CA7 /* Manager.swift */,
@@ -150,6 +158,18 @@
 				2087E785276F24F60091EC0C /* CustomPanGestureRecognizer.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		2090DB1527730940005F3868 /* Item Classes */ = {
+			isa = PBXGroup;
+			children = (
+				2090DB132773091C005F3868 /* ItemProtocol.swift */,
+				20677491276E1A2C00C82CA7 /* Item.swift */,
+				2090DB11277302F1005F3868 /* Key.swift */,
+				2090DB162773096D005F3868 /* Torch.swift */,
+				2090DB1827730A53005F3868 /* Food.swift */,
+			);
+			name = "Item Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,15 +250,19 @@
 				20677494276E1B1900C82CA7 /* Manager.swift in Sources */,
 				2067747A276E14C100C82CA7 /* ViewController.swift in Sources */,
 				2090DB0C2772D1E7005F3868 /* GamePlay.swift in Sources */,
+				2090DB1927730A53005F3868 /* Food.swift in Sources */,
 				2090DB102772DA06005F3868 /* AvailableDirections.swift in Sources */,
 				2087E78F277080BA0091EC0C /* MapCollectionViewCell.swift in Sources */,
 				2087E78827707EBD0091EC0C /* MapViewController.swift in Sources */,
 				20677498276E292B00C82CA7 /* InvCollectionViewCell.swift in Sources */,
+				2090DB172773096D005F3868 /* Torch.swift in Sources */,
+				2090DB142773091C005F3868 /* ItemProtocol.swift in Sources */,
 				2087E786276F24F60091EC0C /* CustomPanGestureRecognizer.swift in Sources */,
 				2087E78B27707F3A0091EC0C /* MapTableViewCell.swift in Sources */,
 				2090DB0E2772D298005F3868 /* Game.swift in Sources */,
 				2087E784276E6CA40091EC0C /* CustomTapGestureRecognizer.swift in Sources */,
 				20677476276E14C100C82CA7 /* AppDelegate.swift in Sources */,
+				2090DB12277302F1005F3868 /* Key.swift in Sources */,
 				20677490276E1A0C00C82CA7 /* Room.swift in Sources */,
 				20677478276E14C100C82CA7 /* SceneDelegate.swift in Sources */,
 			);

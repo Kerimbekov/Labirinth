@@ -146,7 +146,7 @@ class ViewController: UIViewController {
                 //Flag if in inventory we already have this item, if yes than just add +1 to badge
                 var flag = true
                 for index in 0..<game.inventoryList.count{
-                    if item.name == game.inventoryList[index].name{
+                    if item.idName == game.inventoryList[index].idName{
                         game.inventoryList[index].qty += 1
                         flag = false
                     }
@@ -158,7 +158,7 @@ class ViewController: UIViewController {
                 
                 //Remove item from room
                 for index in 0..<game.currentRoom.itemList.count{
-                    if item.name == game.currentRoom.itemList[index].name{
+                    if item.idName == game.currentRoom.itemList[index].idName{
                         game.currentRoom.itemList.remove(at: index)
                         game.matrix[game.currentX][game.currentY] = game.currentRoom
                         break
@@ -177,7 +177,7 @@ class ViewController: UIViewController {
     
     @objc func tapAction(sender:CustomTapGestureRecognizer){
         let item = sender.model
-        guard item.name != "Chest" else {return}
+        guard item.idName != "Chest" else {return}
         let subView = sender.subView
         subView.removeFromSuperview()
         
@@ -185,7 +185,7 @@ class ViewController: UIViewController {
         //Flag if in inventory we already have this item, if yes than just add +1 to badge
         var flag = true
         for index in 0..<game.inventoryList.count{
-            if item.name == game.inventoryList[index].name{
+            if item.idName == game.inventoryList[index].idName{
                 game.inventoryList[index].qty += 1
                 flag = false
             }
@@ -197,7 +197,7 @@ class ViewController: UIViewController {
         
         //Remove item from room
         for index in 0..<game.currentRoom.itemList.count{
-            if item.name == game.currentRoom.itemList[index].name{
+            if item.idName == game.currentRoom.itemList[index].idName{
                 game.currentRoom.itemList.remove(at: index)
                 game.matrix[game.currentX][game.currentY] = game.currentRoom
                 break
@@ -268,7 +268,6 @@ class ViewController: UIViewController {
     }
     
     func makeBlueAllDirections(){
-        game.matrix[game.currentX][game.currentY].isHereNow = false
         rightImageView.tintColor = .systemBlue
         leftImageView.tintColor = .systemBlue
         upImageView.tintColor = .systemBlue
@@ -289,7 +288,7 @@ class ViewController: UIViewController {
         for index in 0..<game.inventoryList.count{
             let item = game.inventoryList[index]
             if item.isSelected{
-                if item.name == "Food"{
+                if item is Food{
                     game.stepLeft += 10
                     stepsLabel.text = "\(game.stepLeft)"
                     if item.qty > 1{
@@ -297,8 +296,8 @@ class ViewController: UIViewController {
                     }else{
                         game.inventoryList.remove(at: index)
                     }
-                }else if item.name == "Key"{
-                    if game.currentRoom.itemList.contains(where: {$0.name == "Chest"}) {
+                }else if item is Key{
+                    if game.currentRoom.itemList.contains(where: {$0.idName == "Chest"}) {
                         mainView.isHidden = true
                         inventoryView.isHidden = true
                         buttonsView.isHidden = true
@@ -308,7 +307,7 @@ class ViewController: UIViewController {
                         lostLabel.text = "Winner!"
                         lostLabel.isHidden = false
                     }
-                }else if item.name == "Torch"{
+                }else if item is Torch{
                     mainView.alpha = 1
                 }
             }
@@ -370,7 +369,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap"{
             let vc = segue.destination as! MapViewController
-            vc.matrix = game.matrix
+            vc.matrix = gamePlay.game.matrix
         }
     }
     
@@ -451,7 +450,7 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
         buttonsView.isHidden = false
         let item = game.inventoryList[indexPath.row]
         itemDescriptionLabel.text = item.description
-        if item.name == "Key" || item.name == "Food" || item.name == "Torch"{
+        if item is Key || item is Food || item is Torch{
             useButton.isEnabled = true
         }else{
             useButton.isEnabled = false
