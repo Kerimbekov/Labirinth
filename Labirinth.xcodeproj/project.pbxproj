@@ -25,6 +25,9 @@
 		2087E78C27707F3A0091EC0C /* MapTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2087E78A27707F3A0091EC0C /* MapTableViewCell.xib */; };
 		2087E78F277080BA0091EC0C /* MapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2087E78D277080BA0091EC0C /* MapCollectionViewCell.swift */; };
 		2087E790277080BA0091EC0C /* MapCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2087E78E277080BA0091EC0C /* MapCollectionViewCell.xib */; };
+		2090DB0C2772D1E7005F3868 /* GamePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB0B2772D1E7005F3868 /* GamePlay.swift */; };
+		2090DB0E2772D298005F3868 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB0D2772D298005F3868 /* Game.swift */; };
+		2090DB102772DA06005F3868 /* AvailableDirections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2090DB0F2772DA06005F3868 /* AvailableDirections.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +51,9 @@
 		2087E78A27707F3A0091EC0C /* MapTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapTableViewCell.xib; sourceTree = "<group>"; };
 		2087E78D277080BA0091EC0C /* MapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionViewCell.swift; sourceTree = "<group>"; };
 		2087E78E277080BA0091EC0C /* MapCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapCollectionViewCell.xib; sourceTree = "<group>"; };
+		2090DB0B2772D1E7005F3868 /* GamePlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlay.swift; sourceTree = "<group>"; };
+		2090DB0D2772D298005F3868 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		2090DB0F2772DA06005F3868 /* AvailableDirections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableDirections.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +135,10 @@
 			children = (
 				2067748F276E1A0C00C82CA7 /* Room.swift */,
 				20677491276E1A2C00C82CA7 /* Item.swift */,
+				2090DB0D2772D298005F3868 /* Game.swift */,
+				2090DB0F2772DA06005F3868 /* AvailableDirections.swift */,
 				20677493276E1B1900C82CA7 /* Manager.swift */,
+				2090DB0B2772D1E7005F3868 /* GamePlay.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -220,11 +229,14 @@
 				20677492276E1A2C00C82CA7 /* Item.swift in Sources */,
 				20677494276E1B1900C82CA7 /* Manager.swift in Sources */,
 				2067747A276E14C100C82CA7 /* ViewController.swift in Sources */,
+				2090DB0C2772D1E7005F3868 /* GamePlay.swift in Sources */,
+				2090DB102772DA06005F3868 /* AvailableDirections.swift in Sources */,
 				2087E78F277080BA0091EC0C /* MapCollectionViewCell.swift in Sources */,
 				2087E78827707EBD0091EC0C /* MapViewController.swift in Sources */,
 				20677498276E292B00C82CA7 /* InvCollectionViewCell.swift in Sources */,
 				2087E786276F24F60091EC0C /* CustomPanGestureRecognizer.swift in Sources */,
 				2087E78B27707F3A0091EC0C /* MapTableViewCell.swift in Sources */,
+				2090DB0E2772D298005F3868 /* Game.swift in Sources */,
 				2087E784276E6CA40091EC0C /* CustomTapGestureRecognizer.swift in Sources */,
 				20677476276E14C100C82CA7 /* AppDelegate.swift in Sources */,
 				20677490276E1A0C00C82CA7 /* Room.swift in Sources */,

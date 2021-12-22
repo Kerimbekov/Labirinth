@@ -27,20 +27,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var lostLabel: UILabel!
     @IBOutlet weak var invLabel:UILabel!
     
-    var inventoryList = [Item]()
-    var matrix = [[Room]]()
-    var currentRoom = Room()
-    var x = 3
-    var y = 3
-    var stepLeft = 100
-    let manager = Manager()
+    
+    var game = Game()
+    var gamePlay = GamePlay()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.layoutSubviews()
         viewWillLayoutSubviews()
-        manager.createMatrix()
-        matrix = manager.matrix
+        game = gamePlay.game
         prepareCollectionView()
         prepareRoom()
         addGestureToButtons()
@@ -55,19 +50,17 @@ class ViewController: UIViewController {
         super.viewWillLayoutSubviews()
         view.layoutIfNeeded()
         view.layoutSubviews()
-        
     }
     
     func prepareRoom(){
-        currentRoom = matrix[x][y]
-        currentRoom.isSeen = true
-        currentRoom.isHereNow = true
+        gamePlay.enterRoom()
+        game = gamePlay.game
         
         controlSteps()
         drawDoors()
         drawItemsInRoom()
         
-        if currentRoom.isBlack{
+        if game.currentRoom.isBlack{
             mainView.alpha = 0.02
             lostLabel.isHidden = true
         }else{
@@ -77,10 +70,8 @@ class ViewController: UIViewController {
     }
     
     func controlSteps(){
-        stepLeft -= 1
-        stepsLabel.text = "\(stepLeft)"
-        
-        if stepLeft == 0{
+        stepsLabel.text = "\(game.stepLeft)"
+        if game.stepLeft == 0{
             mainView.isHidden = true
             inventoryView.isHidden = true
             buttonsView.isHidden = true
@@ -91,43 +82,10 @@ class ViewController: UIViewController {
     }
     
     func drawDoors(){
-        upImageView.isHidden = false
-        leftImageView.isHidden = false
-        downImageView.isHidden = false
-        rightImageView.isHidden = false
-        if x == 0{
-            upImageView.isHidden = true
-        }else{
-            let roomUp = matrix[x - 1][y]
-            if !roomUp.isItRoom{
-                upImageView.isHidden = true
-            }
-        }
-        if y == 0{
-            leftImageView.isHidden = true
-        }else{
-            let roomLeft = matrix[x][y - 1]
-            if !roomLeft.isItRoom{
-                leftImageView.isHidden = true
-            }
-        }
-        
-        if x == matrix.count - 1{
-            downImageView.isHidden = true
-        }else{
-            let roomDown = matrix[x + 1][y]
-            if !roomDown.isItRoom{
-                downImageView.isHidden = true
-            }
-        }
-        if y == matrix.count - 1{
-            rightImageView.isHidden = true
-        }else{
-            let roomRight = matrix[x][y + 1]
-            if !roomRight.isItRoom{
-                rightImageView.isHidden = true
-            }
-        }
+        upImageView.isHidden = game.directions.up
+        leftImageView.isHidden = game.directions.left
+        downImageView.isHidden = game.directions.down
+        rightImageView.isHidden = game.directions.right
     }
     
     func drawItemsInRoom(){
@@ -137,17 +95,17 @@ class ViewController: UIViewController {
         }
         
         var index = 0
-        for item in currentRoom.itemList{
+        for item in game.currentRoom.itemList{
             let myImageView = UIImageView(image: item.image)
             if item.x == 0 && item.y == 0{
-                currentRoom.itemList[index].x = Int.random(in: 0...Int(roomView.frame.width) - 60)
-                currentRoom.itemList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 150)
-                matrix[x][y] = currentRoom
+                game.currentRoom.itemList[index].x = Int.random(in: 0...Int(roomView.frame.width) - 60)
+                game.currentRoom.itemList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 150)
+                game.matrix[game.currentX][game.currentY] = game.currentRoom
             }
-            myImageView.frame = CGRect(x: currentRoom.itemList[index].x, y: currentRoom.itemList[index].y, width: 60, height: 60)
+            myImageView.frame = CGRect(x: game.currentRoom.itemList[index].x, y: game.currentRoom.itemList[index].y, width: 60, height: 60)
             roomView.addSubview(myImageView)
             
-            let tapG = CustomTapGestureRecognizer(target: self, action: #selector(getItem),model: item,subView: myImageView)
+            let tapG = CustomTapGestureRecognizer(target: self, action: #selector(tapAction),model: item,subView: myImageView)
             myImageView.addGestureRecognizer(tapG)
             myImageView.isUserInteractionEnabled = true
             
@@ -170,11 +128,11 @@ class ViewController: UIViewController {
             targetView.center = CGPoint(x: initialCenter.x + translation.x,
                                           y: initialCenter.y + translation.y)
             var index = 0
-            for checkItem in currentRoom.itemList{
+            for checkItem in game.currentRoom.itemList{
                 if checkItem.itemId == item.itemId{
-                    currentRoom.itemList[index].x = Int(targetView.frame.minX)
-                    currentRoom.itemList[index].y = Int(targetView.frame.minY)
-                    matrix[x][y] = currentRoom
+                    game.currentRoom.itemList[index].x = Int(targetView.frame.minX)
+                    game.currentRoom.itemList[index].y = Int(targetView.frame.minY)
+                    game.matrix[game.currentX][game.currentY] = game.currentRoom
                 }
                 index += 1
             }
@@ -187,22 +145,22 @@ class ViewController: UIViewController {
                 //Add item to inventory
                 //Flag if in inventory we already have this item, if yes than just add +1 to badge
                 var flag = true
-                for index in 0..<inventoryList.count{
-                    if item.name == inventoryList[index].name{
-                        inventoryList[index].qty += 1
+                for index in 0..<game.inventoryList.count{
+                    if item.name == game.inventoryList[index].name{
+                        game.inventoryList[index].qty += 1
                         flag = false
                     }
                 }
                 if flag{
-                    inventoryList.append(item)
+                    game.inventoryList.append(item)
                 }
                 itemCollectionView.reloadData()
                 
                 //Remove item from room
-                for index in 0..<currentRoom.itemList.count{
-                    if item.name == currentRoom.itemList[index].name{
-                        currentRoom.itemList.remove(at: index)
-                        matrix[x][y] = currentRoom
+                for index in 0..<game.currentRoom.itemList.count{
+                    if item.name == game.currentRoom.itemList[index].name{
+                        game.currentRoom.itemList.remove(at: index)
+                        game.matrix[game.currentX][game.currentY] = game.currentRoom
                         break
                     }
                 }
@@ -217,7 +175,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func getItem(sender:CustomTapGestureRecognizer){
+    @objc func tapAction(sender:CustomTapGestureRecognizer){
         let item = sender.model
         guard item.name != "Chest" else {return}
         let subView = sender.subView
@@ -226,22 +184,22 @@ class ViewController: UIViewController {
         //Add item to inventory
         //Flag if in inventory we already have this item, if yes than just add +1 to badge
         var flag = true
-        for index in 0..<inventoryList.count{
-            if item.name == inventoryList[index].name{
-                inventoryList[index].qty += 1
+        for index in 0..<game.inventoryList.count{
+            if item.name == game.inventoryList[index].name{
+                game.inventoryList[index].qty += 1
                 flag = false
             }
         }
         if flag{
-            inventoryList.append(item)
+            game.inventoryList.append(item)
         }
         itemCollectionView.reloadData()
         
         //Remove item from room
-        for index in 0..<currentRoom.itemList.count{
-            if item.name == currentRoom.itemList[index].name{
-                currentRoom.itemList.remove(at: index)
-                matrix[x][y] = currentRoom
+        for index in 0..<game.currentRoom.itemList.count{
+            if item.name == game.currentRoom.itemList[index].name{
+                game.currentRoom.itemList.remove(at: index)
+                game.matrix[game.currentX][game.currentY] = game.currentRoom
                 break
             }
         }
@@ -277,10 +235,8 @@ class ViewController: UIViewController {
         if sender.state == .ended{
             makeBlueAllDirections()
             downImageView.tintColor = .gray
-            if x > 0{
-                x -= 1
-                prepareRoom()
-            }
+            gamePlay.moveUp()
+            prepareRoom()
         }
     }
     
@@ -288,10 +244,8 @@ class ViewController: UIViewController {
         if sender.state == .ended{
             makeBlueAllDirections()
             upImageView.tintColor = .gray
-            if x < matrix.count - 1 {
-                x += 1
-                prepareRoom()
-            }
+            gamePlay.moveDown()
+            prepareRoom()
         }
     }
     
@@ -299,10 +253,8 @@ class ViewController: UIViewController {
         if sender.state == .ended{
             makeBlueAllDirections()
             leftImageView.tintColor = .gray
-            if y < matrix.count - 1{
-                y += 1
-                prepareRoom()
-            }
+            gamePlay.moveRight()
+            prepareRoom()
         }
     }
     
@@ -310,15 +262,13 @@ class ViewController: UIViewController {
         if sender.state == .ended{
             makeBlueAllDirections()
             rightImageView.tintColor = .gray
-            if y > 0{
-                y -= 1
-                prepareRoom()
-            }
+            gamePlay.moveLeft()
+            prepareRoom()
         }
     }
     
     func makeBlueAllDirections(){
-        matrix[x][y].isHereNow = false
+        game.matrix[game.currentX][game.currentY].isHereNow = false
         rightImageView.tintColor = .systemBlue
         leftImageView.tintColor = .systemBlue
         upImageView.tintColor = .systemBlue
@@ -336,19 +286,19 @@ class ViewController: UIViewController {
     }
 
     @IBAction func useTapped(_ sender: Any) {
-        for index in 0..<inventoryList.count{
-            let item = inventoryList[index]
+        for index in 0..<game.inventoryList.count{
+            let item = game.inventoryList[index]
             if item.isSelected{
                 if item.name == "Food"{
-                    stepLeft += 10
-                    stepsLabel.text = "\(stepLeft)"
+                    game.stepLeft += 10
+                    stepsLabel.text = "\(game.stepLeft)"
                     if item.qty > 1{
-                        inventoryList[index].qty -= 1
+                        game.inventoryList[index].qty -= 1
                     }else{
-                        inventoryList.remove(at: index)
+                        game.inventoryList.remove(at: index)
                     }
                 }else if item.name == "Key"{
-                    if currentRoom.itemList.contains(where: {$0.name == "Chest"}) {
+                    if game.currentRoom.itemList.contains(where: {$0.name == "Chest"}) {
                         mainView.isHidden = true
                         inventoryView.isHidden = true
                         buttonsView.isHidden = true
@@ -368,13 +318,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func discardTapped(_ sender: Any) {
-        for index in 0..<inventoryList.count{
-            let item = inventoryList[index]
+        for index in 0..<game.inventoryList.count{
+            let item = game.inventoryList[index]
             if item.isSelected{
                 if item.qty > 1{
-                    inventoryList[index].qty -= 1
+                    game.inventoryList[index].qty -= 1
                 }else{
-                    inventoryList.remove(at: index)
+                    game.inventoryList.remove(at: index)
                     break
                 }
             }
@@ -384,17 +334,17 @@ class ViewController: UIViewController {
     }
     
     @IBAction func dropTapped(_ sender: Any) {
-        for index in 0..<inventoryList.count{
-            let item = inventoryList[index]
+        for index in 0..<game.inventoryList.count{
+            let item = game.inventoryList[index]
             if item.isSelected{
                 let myImageView = UIImageView(image: item.image)
                 if item.x == 0 && item.y == 0{
-                    inventoryList[index].x = Int.random(in: 0...Int(roomView.frame.width) - 60)
-                    inventoryList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 150)
+                    game.inventoryList[index].x = Int.random(in: 0...Int(roomView.frame.width) - 60)
+                    game.inventoryList[index].y = Int.random(in: 0...Int(roomView.frame.height) - 150)
                 }
-                myImageView.frame = CGRect(x: inventoryList[index].x , y: inventoryList[index].y, width: 60, height: 60)
+                myImageView.frame = CGRect(x: game.inventoryList[index].x , y: game.inventoryList[index].y, width: 60, height: 60)
                 roomView.addSubview(myImageView)
-                let tapG = CustomTapGestureRecognizer(target: self, action: #selector(getItem),model: item,subView: myImageView)
+                let tapG = CustomTapGestureRecognizer(target: self, action: #selector(tapAction),model: item,subView: myImageView)
                 myImageView.addGestureRecognizer(tapG)
                 myImageView.isUserInteractionEnabled = true
                 
@@ -403,12 +353,12 @@ class ViewController: UIViewController {
                 
                 var newItem = item
                 newItem.qty = 1
-                matrix[x][y].itemList.append(newItem)
+                game.matrix[game.currentX][game.currentY].itemList.append(newItem)
                 
                 if item.qty > 1{
-                    inventoryList[index].qty -= 1
+                    game.inventoryList[index].qty -= 1
                 }else{
-                    inventoryList.remove(at: index)
+                    game.inventoryList.remove(at: index)
                     break
                 }
             }
@@ -420,7 +370,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toMap"{
             let vc = segue.destination as! MapViewController
-            vc.matrix = matrix
+            vc.matrix = game.matrix
         }
     }
     
@@ -435,13 +385,10 @@ class ViewController: UIViewController {
         let okAction = UIAlertAction(title: "Ok", style: .default) { [self] action in
             let str = alertTextField.text ?? "8"
             if let num = Int(str){
-                manager.generateMatrix(qty: num)
-                matrix = manager.matrix
-                x = manager.initialX
-                y = manager.initialY
-                inventoryList = [Item]()
+                gamePlay.createNewGame(roomQuantity: num)
+                game = gamePlay.game
+                
                 itemCollectionView.reloadData()
-                stepLeft = 100
                 mainView.isHidden = false
                 inventoryView.isHidden = false
                 buttonsView.isHidden = false
@@ -471,12 +418,12 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return inventoryList.count
+        return game.inventoryList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InvCollectionViewCell", for: indexPath) as! InvCollectionViewCell
-        let invItem = inventoryList[indexPath.item]
+        let invItem = game.inventoryList[indexPath.item]
         cell.invItem = invItem
         cell.myDelegate = self
         cell.index = indexPath.row
@@ -497,12 +444,12 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         deselectItemsInInventory()
-        inventoryList[indexPath.row].isSelected = true
+        game.inventoryList[indexPath.row].isSelected = true
         itemCollectionView.reloadData()
         
         itemDescriptionLabel.isHidden = false
         buttonsView.isHidden = false
-        let item = inventoryList[indexPath.row]
+        let item = game.inventoryList[indexPath.row]
         itemDescriptionLabel.text = item.description
         if item.name == "Key" || item.name == "Food" || item.name == "Torch"{
             useButton.isEnabled = true
@@ -540,7 +487,7 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
                 let randomY = Int.random(in: 31...Int(roomView.frame.height) - 31)
                 myImageView.frame = CGRect(x: randomX, y: randomY, width: 60, height: 60)
                 roomView.addSubview(myImageView)
-                let tapG = CustomTapGestureRecognizer(target: self, action: #selector(getItem),model: item,subView: myImageView)
+                let tapG = CustomTapGestureRecognizer(target: self, action: #selector(tapAction),model: item,subView: myImageView)
                 myImageView.addGestureRecognizer(tapG)
                 myImageView.isUserInteractionEnabled = true
                 
@@ -549,12 +496,12 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
                 
                 var newItem = item
                 newItem.qty = 1
-                matrix[x][y].itemList.append(newItem)
+                game.matrix[game.currentX][game.currentY].itemList.append(newItem)
                 
                 if item.qty > 1{
-                    inventoryList[index].qty -= 1
+                    game.inventoryList[index].qty -= 1
                 }else{
-                    inventoryList.remove(at: index)
+                    game.inventoryList.remove(at: index)
                 }
                 self.itemCollectionView.reloadInputViews()
                 self.itemCollectionView.reloadData()
@@ -572,8 +519,8 @@ extension ViewController:UICollectionViewDelegate,UICollectionViewDataSource,UIC
     }
     
     func deselectItemsInInventory(){
-        for index in 0..<inventoryList.count{
-            inventoryList[index].isSelected = false
+        for index in 0..<game.inventoryList.count{
+            game.inventoryList[index].isSelected = false
         }
         itemDescriptionLabel.isHidden = true
         buttonsView.isHidden = true

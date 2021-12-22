@@ -9,16 +9,17 @@ import Foundation
 import UIKit
 
 class Manager{
-    var itemList = [Item]()
-    var matrix = [[Room]]()
-    var initialX = 0
-    var initialY = 0
+    private var itemList = [Item]()
+    private var matrix = [[Room]]()
+    private var initialX = 0
+    private var initialY = 0
+    var game = Game()
     
     init() {
         createItems()
     }
     
-    func createItems(){
+    private func createItems(){
         let key = Item(name: "Key", description: "Opens chest", qty: 1, image: UIImage(named: "key"))
         let chest = Item(name: "Chest", description: "Here is your holy grail", qty: 1,image: UIImage(named: "chest"))
         let stone = Item(name: "Stone", description: "Useless stone", qty: 5,image: UIImage(named: "stone"))
@@ -39,7 +40,7 @@ class Manager{
         itemList.append(gold)
     }
     
-    func createMatrix(){
+    func createDefaultMatrix(){
         var list1 = [Room]()
         let empty = Room()
         let notEmpty = Room(itemList: [Item](), isItRoom: true)
@@ -72,9 +73,13 @@ class Manager{
         matrix.append(list4)
         
         addItemsToRooms()
+        initialX = matrix.count - 1
+        initialY = matrix.count - 1
+        initializeGame()
     }
     
     func generateMatrix(qty:Int){
+        game = Game()
         //Generate matrix with only walls
         var newMatrix = [[Room]]()
         let wall = Room()
@@ -86,7 +91,7 @@ class Manager{
             newMatrix.append(list)
         }
         
-        
+        //Generate rooms in matrix
         let room = Room(itemList: [Item](), isItRoom: true, isBlack: false, isSeen: false, isHereNow: false)
         var createdRooms = 0
         var isFirst = true
@@ -119,9 +124,10 @@ class Manager{
         matrix = newMatrix
         generateInitialPostion()
         addItemsToRooms()
+        initializeGame()
     }
     
-    func generateInitialPostion(){
+    private func generateInitialPostion(){
         var isPositionFound = false
         while !isPositionFound{
             let randomX = Int.random(in: 0..<10)
@@ -134,7 +140,15 @@ class Manager{
         }
     }
     
-    func addItemsToRooms(){
+    private func initializeGame(){
+        game.matrix = matrix
+        game.initialX = initialX
+        game.initialY = initialY
+        game.currentX = initialX
+        game.currentY = initialY
+    }
+    
+    private func addItemsToRooms(){
         var id = 0
         for item in itemList{
             var addedQty = 0
