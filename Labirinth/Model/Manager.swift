@@ -93,7 +93,7 @@ class Manager{
         
         //Generate rooms in matrix
         let room = Room(itemList: [Item](), isItRoom: true, isBlack: false, isSeen: false, isHereNow: false)
-        var createdRooms = 0
+        var createdRooms = 1
         var isFirst = true
         let roomQty = qty > 100 ? 100 : qty
         while createdRooms < roomQty {
@@ -116,8 +116,10 @@ class Manager{
                 let yDown = randomY
                 
                 if newMatrix[xLeft][yLeft].isItRoom || newMatrix[xRight][yRight].isItRoom || newMatrix[xUp][yUp].isItRoom || newMatrix[xDown][yDown].isItRoom{
-                    newMatrix[randomX][randomY].isItRoom = true
-                    createdRooms += 1
+                    if newMatrix[randomX][randomY].isItRoom == false{
+                        newMatrix[randomX][randomY].isItRoom = true
+                        createdRooms += 1
+                    }
                 }
             }
         }
